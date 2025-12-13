@@ -1,0 +1,172 @@
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Blueming - IU</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <style>
+        /* 动态背景样式 */
+        body::before {
+            background-image: url('./images/Blueming.jpg');
+        }
+    </style>
+</head>
+
+<body style="--bg-image: url('./images/Blueming.jpg')">
+    <audio id="audioPlayer" src=""></audio>
+    <div class="player-container" id="playerContainer">
+        <!-- 封面和信息区域 -->
+        <div class="cover-section" id="coverSection">
+            <div class="cover-image-container">
+                <img src="./images/Blueming.jpg" alt="封面" class="cover-image"
+                    id="coverImage" />
+                <div class="vinyl-effect"></div>
+            </div>
+            <div class="song-info">
+                <h1 class="song-title" id="songTitle">Blueming</h1>
+                <p class="song-artist" id="songArtist">IU</p>
+                <p class="song-album" id="songAlbum">Love Poem</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time-info">
+                    <span id="currentTime">00:00</span>
+                    <span id="duration">05:01</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn loop-btn secondary-btn active" id="loopBtn"><i
+                        class="fas fa-list-ol"></i><span class="tooltip">列表循环</span></button>
+                <button class="control-btn secondary-btn" id="prevBtn">
+                    <i class="fas fa-backward-step"></i>
+                    <span class="tooltip">上一首</span>
+                </button>
+                <button class="control-btn play-btn" id="playBtn">
+                    <i class="fas fa-play" id="playIcon"></i>
+                    <span class="tooltip">播放</span>
+                </button>
+                <button class="control-btn secondary-btn" id="nextBtn">
+                    <i class="fas fa-forward-step"></i>
+                    <span class="tooltip">下一首</span>
+                </button>
+                <div class="volume-control">
+                    <button class="control-btn secondary-btn" id="volumeBtn">
+                        <i class="fas fa-volume-high" id="volumeIcon"></i>
+                        <span class="tooltip">音量</span>
+                    </button>
+                    <div class="volume-slider-container">
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+                    </div>
+                </div>
+                <button class="control-btn secondary-btn" id="playlistBtn">
+                    <i class="fas fa-list"></i>
+                    <span class="tooltip">播放列表</span>
+                </button>
+            </div>
+
+            <button class="toggle-lyrics mobile" id="toggleLyrics"><i class="fas fa-align-left"></i> 查看歌词</button>
+        </div>
+
+        <!-- 歌词区域 -->
+        <div class="lyrics-section" id="lyricsSection">
+            <div class="lyrics-title">
+                <span>歌词</span>
+                <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> 下载歌曲</button>
+            </div>
+            <div class="lyrics-container" id="lyricsContainer">
+                <!-- 这里是歌词 -->
+            </div>
+        </div>
+
+        <!-- 加载遮罩 -->
+        <div class="loading hidden" id="loading">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- 播放列表 -->
+    <div class="playlist-container" id="playlistContainer">
+        <div class="playlist-header">
+            <div class="playlist-title">播放列表</div>
+            <button class="close-playlist" id="closePlaylist">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="playlistItems">
+            <div class="playlist-clear-btn" id="clearPlaylistBtn"><i class="fas fa-trash"></i> 清空播放列表</div>
+        </div>
+    </div>
+
+    <!-- 下载弹窗 -->
+    <div class="download-modal" id="downloadModal">
+        <div class="download-modal-content">
+            <div class="download-modal-header">
+                <div class="download-modal-title">选择音质下载</div>
+                <button class="close-download-modal" id="closeDownloadModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="download-options" id="downloadOptions">
+            </div>
+            <button class="download-btn-modal" id="confirmDownload"><i class="fas fa-download"></i> 下载</button>
+        </div>
+    </div>
+    <!-- 修改添加项 -->
+    <div class="suspended">
+        <!-- 歌曲信息 -->
+        <div class="pc-song-info">
+            <img id="pcCoverImage" src="./images/Blueming.jpg" alt="" width="50"
+                height="50" />
+            <div>
+                <h3 class="pc-song-title" id="pcSongTitle">Blueming</h3>
+                <p class="pc-song-artist" id="pcSongArtist">IU</p>
+            </div>
+        </div>
+        <!-- 播放控制 -->
+        <div class="pc-controls">
+            <button class="pc-control-btn pc-loop-btn pc-secondary-btn" id="pcLoopBtn">
+                <i class="fas fa-repeat" id="pcLoopIcon"></i>
+            </button>
+            <button class="pc-control-btn pc-secondary-btn" id="pcPrevBtn">
+                <i class="fas fa-backward-step"></i>
+            </button>
+            <button class="pc-control-btn pc-play-btn" id="pcPlayBtn">
+                <i class="fas fa-play" id="pcPlayIcon"></i>
+            </button>
+            <button class="pc-control-btn pc-secondary-btn" id="pcNextBtn">
+                <i class="fas fa-forward-step"></i>
+            </button>
+            <div class="pc-volume-control">
+                <button class="pc-control-btn pc-secondary-btn" id="pcVolumeBtn">
+                    <i class="fas fa-volume-high" id="pcVolumeIcon"></i>
+                </button>
+                <div class="pc-volume-slider-container">
+                    <input type="range" class="pc-volume-slider" id="pcVolumeSlider" min="0" max="1" step="0.01" value="1">
+                </div>
+            </div>
+            <button class="pc-control-btn pc-secondary-btn" id="pcPlaylistBtn">
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+        <!-- 下载按钮 -->
+        <button class="pc-download-btn" id="pcDownloadBtn">
+            <i class="fas fa-download"></i>
+        </button>
+        <!-- 进度条 -->
+        <div class="pc-progress-container">
+            <div class="pc-progress-bar" id="pcProgressBar">
+                <div class="pc-progress" id="pcProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
